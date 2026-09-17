@@ -25,14 +25,56 @@ jobs:
           php-version: '8.3'
           tools: composer:v2
           coverage: none
+          extensions: mbstring, intl, pdo, pdo_sqlite, sqlite3
 
       - name: Setup Node
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: '22'
 
-      - name: Setup Application
-        run: composer setup
+      - name: Cache Composer packages
+        id: composer-cache
+        uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-
 
-      - name: Run CI Checks
-        run: composer ci:check
+      - name: Install Composer dependencies
+        if: steps.composer-cache.outputs.cache-hit != 'true'
+        run: composer install --no-progress --no-interaction --prefer-dist
+
+      - name: Cache NPM packages
+        id: npm-cache
+        uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install NPM dependencies
+        if: steps.npm-cache.outputs.cache-hit != 'true'
+        run: npm ci
+
+      - name: Build assets
+        run: npm run build
+
+      - name: Prepare Laravel Application
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+          php artisan config:clear
+
+      - name: Run Database Migrations
+        run: php artisan migrate --force
+
+      - name: Run Code Style Check
+        run: composer lint:check
+
+      - name: Run Static Analysis
+        run: composer types:check
+
+      - name: Run Tests
+        run: composer test
