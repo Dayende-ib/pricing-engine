@@ -1,7 +1,7 @@
 <div>
     <div>
         <flux:heading>{{ $editingAdjustment ? "Modifier l'ajustement" : 'Nouvel ajustement' }}</flux:heading>
-        <flux:text size="sm">Ajustez le prix selon l'urgence, le contexte, la négociation...</flux:text>
+        <flux:text size="sm" class="text-zinc-500 dark:text-zinc-400">Ajustez le prix selon l'urgence, le contexte, la négociation...</flux:text>
     </div>
 
     <form wire:submit.prevent="saveAdjustment" class="mt-6 space-y-5">
@@ -39,7 +39,7 @@
             <flux:textarea wire:model="adjustment_reason" rows="2" resize="vertical" placeholder="Ex : Délai très court demandé par le client" />
         </flux:field>
 
-        <div class="mt-6 flex items-center justify-end gap-3 border-t border-zinc-800/5 pt-5 dark:border-white/10">
+        <div class="mt-6 flex items-center justify-end gap-3 border-t border-zinc-200/60 pt-5 dark:border-white/[0.06]">
             <flux:modal.close>
                 <flux:button variant="outline" wire:click="closeModals">Annuler</flux:button>
             </flux:modal.close>

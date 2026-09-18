@@ -146,6 +146,9 @@ class Create extends Component
     {
         $progress = (int) round(($this->currentStep / $this->totalSteps) * 100);
 
-        return view('livewire.projects.create', ['progress' => $progress]);
+        return view('livewire.projects.create', [
+            'progress' => $progress,
+            'pricingProfiles' => $this->pricingProfiles,
+        ]);
     }
 }

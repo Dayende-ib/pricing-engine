@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="dark">
+    <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" @class(['dark' => (session('theme') ?? request()->cookie('theme', 'dark')) === 'dark'])>
     <head>
         @include('partials.head')
     </head>
-    <body class="min-h-screen bg-white dark:bg-zinc-800">
-        <flux:sidebar sticky collapsible="mobile" class="border-e border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900">
+    <body class="min-h-screen bg-white dark:bg-background">
+        <flux:sidebar sticky collapsible="mobile" class="border-e border-zinc-200/80 bg-white dark:border-white/[0.06] dark:bg-sidebar">
             <flux:sidebar.header>
                 <x-app-logo :sidebar="true" href="{{ route('dashboard') }}" wire:navigate />
                 <flux:sidebar.collapse class="lg:hidden" />
@@ -22,7 +22,16 @@
                 </flux:sidebar.group>
             </flux:sidebar.nav>
 
-            <x-desktop-user-menu class="hidden lg:block" :name="auth()->user()->name" />
+            <flux:spacer />
+
+            {{-- Theme Toggle --}}
+            <div class="px-3">
+                @livewire('ThemeToggle')
+            </div>
+
+            <div class="border-t border-zinc-200/80 p-3 dark:border-white/[0.06]">
+                <x-desktop-user-menu class="hidden lg:block" :name="auth()->user()->name" />
+            </div>
         </flux:sidebar>
 
         <!-- Mobile User Menu -->
@@ -30,6 +39,9 @@
             <flux:sidebar.toggle class="lg:hidden" icon="bars-2" inset="left" />
 
             <flux:spacer />
+
+            {{-- Mobile Theme Toggle --}}
+            @livewire('ThemeToggle')
 
             <flux:dropdown position="top" align="end">
                 <flux:profile

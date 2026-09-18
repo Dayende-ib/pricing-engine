@@ -1,7 +1,7 @@
 <div>
     <div>
         <flux:heading>{{ $editingFeature ? 'Modifier la fonctionnalité' : 'Nouvelle fonctionnalité' }}</flux:heading>
-        <flux:text size="sm" >Estimez les heures nécessaires pour cette fonctionnalité.</flux:text>
+        <flux:text size="sm" class="text-zinc-500 dark:text-zinc-400">Estimez les heures nécessaires pour cette fonctionnalité.</flux:text>
     </div>
 
     <form wire:submit.prevent="saveFeature" class="mt-6 space-y-5">
@@ -52,7 +52,7 @@
             </flux:select>
         </flux:field>
 
-        <div class="mt-6 flex items-center justify-end gap-3 border-t border-zinc-800/5 pt-5 dark:border-white/10">
+        <div class="mt-6 flex items-center justify-end gap-3 border-t border-zinc-200/60 pt-5 dark:border-white/[0.06]">
             <flux:modal.close>
                 <flux:button variant="outline" wire:click="closeModals">Annuler</flux:button>
             </flux:modal.close>

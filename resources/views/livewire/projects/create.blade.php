@@ -1,29 +1,31 @@
 <div class="mx-auto max-w-3xl space-y-8">
+    {{-- Page Header --}}
     <div>
         <div class="flex items-center justify-between gap-4">
             <div>
                 <flux:heading size="xl">Nouveau projet</flux:heading>
-                <flux:subheading size="lg">Décrivez votre projet pour démarrer l'estimation</flux:subheading>
+                <flux:text size="sm" class="mt-1 text-zinc-500 dark:text-zinc-400">Décrivez votre projet pour démarrer l'estimation</flux:text>
             </div>
         </div>
 
-        <div class="mt-6 space-y-4">
-            <flux:progress :value="$progress" color="indigo" />
+        {{-- Stepper --}}
+        <div class="mt-8 space-y-4">
+            <flux:progress :value="$progress" color="teal" />
 
             <div class="flex justify-between">
                 @for($i = 1; $i <= $totalSteps; $i++)
                     <div class="relative flex flex-1 flex-col items-center">
                         @if($i < $totalSteps)
-                            <div class="absolute top-4 left-1/2 z-0 h-0.5 w-full rounded-full bg-zinc-800/10 dark:bg-white/10"
+                            <div class="absolute top-4 left-1/2 z-0 h-0.5 w-full rounded-full bg-zinc-200 dark:bg-white/[0.08]"
                                  style="margin-left: -50%;"
                                  wire:ignore.self></div>
                         @endif
 
                         <div @class([
                             'relative z-10 flex size-8 items-center justify-center rounded-full border text-sm font-semibold transition-all duration-300',
-                            'border-emerald-500 bg-emerald-500 text-white' => $i < $currentStep,
-                            'border-indigo-500 bg-indigo-500 text-white ring-4 ring-indigo-500/15' => $i == $currentStep,
-                            'border-zinc-800/15 bg-white text-zinc-400 dark:border-white/15 dark:bg-white/5 dark:text-zinc-500' => $i > $currentStep,
+                            'border-teal-500 bg-teal-500 text-white shadow-sm shadow-teal-500/25' => $i < $currentStep,
+                            'border-teal-500 bg-white dark:bg-background text-teal-600 dark:text-teal-400 ring-4 ring-teal-500/15 dark:shadow-[0_0_12px_-2px_rgba(45,212,191,0.3)]' => $i == $currentStep,
+                            'border-zinc-200 bg-zinc-100 dark:border-white/[0.06] dark:bg-[#141417] text-zinc-500' => $i > $currentStep,
                         ])>
                             @if($i < $currentStep)
                                 <flux:icon icon="check" variant="micro" class="size-4" />
@@ -33,9 +35,10 @@
                         </div>
 
                         <span @class([
-                            'mt-2 hidden text-xs sm:block',
-                            'font-medium text-zinc-800 dark:text-white' => $i == $currentStep,
-                            'text-zinc-400' => $i != $currentStep,
+                            'mt-2 hidden text-xs font-medium sm:block',
+                            'text-teal-400' => $i == $currentStep,
+                            'text-zinc-500 dark:text-zinc-400' => $i != $currentStep && $i < $currentStep,
+                            'text-zinc-400 dark:text-zinc-500' => $i != $currentStep && $i > $currentStep,
                         ])>
                             @switch($i)
                                 @case(1) Informations @break
@@ -52,20 +55,20 @@
 
     <form wire:submit.prevent="save" class="space-y-6">
         @if($currentStep === 1)
-            <flux:card variant="soft">
+            <div class="rounded-2xl border border-zinc-200/60 bg-white p-6 dark:border-white/[0.06] dark:bg-surface">
                 <div class="flex items-center gap-3">
-                    <div class="flex size-10 shrink-0 items-center justify-center rounded-xl bg-zinc-800/5 dark:bg-white/10">
-                        <flux:icon icon="folder" variant="outline" class="size-5 text-indigo-500" />
+                    <div class="flex size-10 shrink-0 items-center justify-center rounded-xl bg-teal-50 dark:bg-teal-500/10">
+                        <flux:icon icon="folder" variant="outline" class="size-5 text-teal-600 dark:text-teal-400" />
                     </div>
                     <flux:heading>Informations du projet</flux:heading>
                 </div>
 
-                <div class="mt-6 space-y-6">
+                <div class="mt-6 space-y-5">
                     <flux:field label="Nom du projet" required>
                         <flux:input wire:model.debounce.300ms="name" placeholder="Ex : Refonte site e-commerce" />
                     </flux:field>
 
-                    <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+                    <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
                         <flux:field label="Nom du client">
                             <flux:input icon="user" wire:model.debounce.300ms="client_name" placeholder="Ex : Entreprise ABC" />
                         </flux:field>
@@ -92,7 +95,7 @@
                             placeholder="Décrivez le projet, ses objectifs, le contexte..." />
                     </flux:field>
 
-                    <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
+                    <div class="grid grid-cols-1 gap-5 md:grid-cols-3">
                         <flux:field label="Date limite">
                             <flux:input type="date" wire:model="deadline" />
                         </flux:field>
@@ -106,19 +109,19 @@
                         </flux:field>
                     </div>
                 </div>
-            </flux:card>
+            </div>
         @endif
 
         @if($currentStep === 2)
-            <flux:card variant="soft">
+            <div class="rounded-2xl border border-zinc-200/60 bg-white p-6 dark:border-white/[0.06] dark:bg-surface">
                 <div class="flex items-center gap-3">
-                    <div class="flex size-10 shrink-0 items-center justify-center rounded-xl bg-zinc-800/5 dark:bg-white/10">
-                        <flux:icon icon="calculator" variant="outline" class="size-5 text-amber-500" />
+                    <div class="flex size-10 shrink-0 items-center justify-center rounded-xl bg-amber-50 dark:bg-amber-500/10">
+                        <flux:icon icon="calculator" variant="outline" class="size-5 text-amber-600 dark:text-amber-400" />
                     </div>
                     <flux:heading>Profil de tarification</flux:heading>
                 </div>
 
-                <div class="mt-6 space-y-6">
+                <div class="mt-6 space-y-5">
                     @if($pricingProfiles->isEmpty())
                         <flux:callout icon="information-circle" color="amber" variant="soft">
                             <flux:callout.text>
@@ -135,7 +138,7 @@
                                                 <div class="flex flex-wrap items-center gap-2">
                                                     <flux:heading>{{ $profile->name }}</flux:heading>
                                                     @if($profile->is_default)
-                                                        <flux:badge color="indigo" rounded>Par défaut</flux:badge>
+                                                        <flux:badge color="teal" rounded>Par défaut</flux:badge>
                                                     @endif
                                                 </div>
                                                 <flux:subheading size="sm">
@@ -144,16 +147,16 @@
                                             </div>
 
                                             <div class="flex shrink-0 gap-2">
-                                                <div class="rounded-lg bg-zinc-800/5 px-3 py-2 text-center dark:bg-white/10">
-                                                    <div class="text-sm font-semibold text-zinc-800 dark:text-white">{{ $profile->minimum_margin * 100 }} %</div>
+                                                <div class="rounded-xl bg-zinc-100 px-3 py-2 text-center dark:bg-white/[0.04]">
+                                                    <div class="text-sm font-semibold text-zinc-800 dark:text-zinc-200">{{ $profile->minimum_margin * 100 }} %</div>
                                                     <div class="text-[11px] uppercase tracking-wide text-zinc-400">Marge min</div>
                                                 </div>
-                                                <div class="rounded-lg bg-indigo-500/10 px-3 py-2 text-center">
-                                                    <div class="text-sm font-semibold text-indigo-500">{{ $profile->target_margin * 100 }} %</div>
-                                                    <div class="text-[11px] uppercase tracking-wide text-zinc-400">Marge cible</div>
+                                                <div class="rounded-xl bg-teal-50 px-3 py-2 text-center ring-1 ring-teal-200 dark:bg-teal-500/10 dark:ring-teal-500/20">
+                                                    <div class="text-sm font-semibold text-teal-600 dark:text-teal-400">{{ $profile->target_margin * 100 }} %</div>
+                                                    <div class="text-[11px] uppercase tracking-wide text-teal-500/60 dark:text-teal-500/60">Marge cible</div>
                                                 </div>
-                                                <div class="rounded-lg bg-zinc-800/5 px-3 py-2 text-center dark:bg-white/10">
-                                                    <div class="text-sm font-semibold text-zinc-800 dark:text-white">{{ $profile->premium_margin * 100 }} %</div>
+                                                <div class="rounded-xl bg-zinc-100 px-3 py-2 text-center dark:bg-white/[0.04]">
+                                                    <div class="text-sm font-semibold text-zinc-800 dark:text-zinc-200">{{ $profile->premium_margin * 100 }} %</div>
                                                     <div class="text-[11px] uppercase tracking-wide text-zinc-400">Marge premium</div>
                                                 </div>
                                             </div>
@@ -172,24 +175,24 @@
                         </flux:field>
                     @endif
                 </div>
-            </flux:card>
+            </div>
         @endif
 
         @if($currentStep === 3)
-            <flux:card variant="soft">
+            <div class="rounded-2xl border border-zinc-200/60 bg-white p-6 dark:border-white/[0.06] dark:bg-surface">
                 <div class="flex items-center gap-3">
-                    <div class="flex size-10 shrink-0 items-center justify-center rounded-xl bg-zinc-800/5 dark:bg-white/10">
-                        <flux:icon icon="squares-2x2" variant="outline" class="size-5 text-purple-500" />
+                    <div class="flex size-10 shrink-0 items-center justify-center rounded-xl bg-violet-50 dark:bg-violet-500/10">
+                        <flux:icon icon="squares-2x2" variant="outline" class="size-5 text-violet-600 dark:text-violet-400" />
                     </div>
                     <flux:heading>Fonctionnalités</flux:heading>
                 </div>
 
                 <div class="flex flex-col items-center px-6 py-12 text-center">
-                    <div class="flex size-16 items-center justify-center rounded-2xl bg-zinc-800/5 dark:bg-white/10">
-                        <flux:icon icon="squares-2x2" name="squares-2x2" variant="outline" class="size-8 text-zinc-400" />
+                    <div class="flex size-16 items-center justify-center rounded-2xl bg-zinc-100 dark:bg-white/[0.04]">
+                        <flux:icon icon="squares-2x2" variant="outline" class="size-8 text-zinc-300 dark:text-zinc-600" />
                     </div>
                     <flux:heading class="mt-4">Gestion des fonctionnalités</flux:heading>
-                    <flux:text class="mt-1 max-w-md">
+                    <flux:text class="mt-1 max-w-md text-zinc-500 dark:text-zinc-400">
                         Vous pourrez ajouter les fonctionnalités, coûts externes et ajustements après la création du projet, depuis la page de détail.
                     </flux:text>
 
@@ -197,7 +200,7 @@
                         Passer cette étape
                     </flux:button>
                 </div>
-            </flux:card>
+            </div>
         @endif
 
         @if($currentStep === 4)
@@ -213,22 +216,22 @@
                 ];
             @endphp
 
-            <flux:card variant="soft">
+            <div class="rounded-2xl border border-zinc-200/60 bg-white p-6 dark:border-white/[0.06] dark:bg-surface">
                 <div class="flex items-center gap-3">
-                    <div class="flex size-10 shrink-0 items-center justify-center rounded-xl bg-zinc-800/5 dark:bg-white/10">
-                        <flux:icon icon="check-badge" variant="outline" class="size-5 text-emerald-500" />
+                    <div class="flex size-10 shrink-0 items-center justify-center rounded-xl bg-emerald-50 dark:bg-emerald-500/10">
+                        <flux:icon icon="check-badge" variant="outline" class="size-5 text-emerald-600 dark:text-emerald-400" />
                     </div>
                     <flux:heading>Confirmation</flux:heading>
                 </div>
 
-                <div class="mt-6 overflow-hidden rounded-xl border border-zinc-800/10 dark:border-white/10">
-                    <dl class="divide-y divide-zinc-800/5 dark:divide-white/10">
+                <div class="mt-6 overflow-hidden rounded-xl border border-zinc-200/60 dark:border-white/[0.06]">
+                    <dl class="divide-y divide-zinc-100 dark:divide-white/[0.06]">
                         <div class="grid grid-cols-1 gap-1 px-5 py-4 sm:grid-cols-3">
-                            <dt class="text-sm font-medium text-zinc-400">Nom du projet</dt>
-                            <dd class="text-sm font-medium text-zinc-800 sm:col-span-2 dark:text-white">{{ $name }}</dd>
+                            <dt class="text-sm font-medium text-zinc-500 dark:text-zinc-400">Nom du projet</dt>
+                            <dd class="text-sm font-semibold text-zinc-900 sm:col-span-2 dark:text-[#f0f0f2]">{{ $name }}</dd>
                         </div>
                         <div class="grid grid-cols-1 gap-1 px-5 py-4 sm:grid-cols-3">
-                            <dt class="text-sm font-medium text-zinc-400">Client</dt>
+                            <dt class="text-sm font-medium text-zinc-500 dark:text-zinc-400">Client</dt>
                             <dd class="text-sm text-zinc-700 sm:col-span-2 dark:text-zinc-200">
                                 @if($client_name)
                                     {{ $client_name }}@if($client_email) ({{ $client_email }})@endif
@@ -238,13 +241,13 @@
                             </dd>
                         </div>
                         <div class="grid grid-cols-1 gap-1 px-5 py-4 sm:grid-cols-3">
-                            <dt class="text-sm font-medium text-zinc-400">Type de projet</dt>
+                            <dt class="text-sm font-medium text-zinc-500 dark:text-zinc-400">Type de projet</dt>
                             <dd class="text-sm text-zinc-700 sm:col-span-2 dark:text-zinc-200">
                                 {{ $projectTypeLabels[$project_type] ?? $project_type }}
                             </dd>
                         </div>
                         <div class="grid grid-cols-1 gap-1 px-5 py-4 sm:grid-cols-3">
-                            <dt class="text-sm font-medium text-zinc-400">Profil tarifaire</dt>
+                            <dt class="text-sm font-medium text-zinc-500 dark:text-zinc-400">Profil tarifaire</dt>
                             <dd class="text-sm text-zinc-700 sm:col-span-2 dark:text-zinc-200">
                                 @if($pricingProfiles->firstWhere('id', $pricing_profile_id)?->name)
                                     {{ $pricingProfiles->firstWhere('id', $pricing_profile_id)?->name }}
@@ -254,11 +257,11 @@
                             </dd>
                         </div>
                         <div class="grid grid-cols-1 gap-1 px-5 py-4 sm:grid-cols-3">
-                            <dt class="text-sm font-medium text-zinc-400">Devise</dt>
+                            <dt class="text-sm font-medium text-zinc-500 dark:text-zinc-400">Devise</dt>
                             <dd class="text-sm text-zinc-700 sm:col-span-2 dark:text-zinc-200">{{ $currency }}</dd>
                         </div>
                         <div class="grid grid-cols-1 gap-1 px-5 py-4 sm:grid-cols-3">
-                            <dt class="text-sm font-medium text-zinc-400">Date limite</dt>
+                            <dt class="text-sm font-medium text-zinc-500 dark:text-zinc-400">Date limite</dt>
                             <dd class="text-sm text-zinc-700 sm:col-span-2 dark:text-zinc-200">
                                 @if($deadline)
                                     {{ \Carbon\Carbon::parse($deadline)->format('d/m/Y') }}
@@ -268,7 +271,7 @@
                             </dd>
                         </div>
                         <div class="grid grid-cols-1 gap-1 px-5 py-4 sm:grid-cols-3">
-                            <dt class="text-sm font-medium text-zinc-400">Budget</dt>
+                            <dt class="text-sm font-medium text-zinc-500 dark:text-zinc-400">Budget</dt>
                             <dd class="text-sm text-zinc-700 sm:col-span-2 dark:text-zinc-200">
                                 @if($budget_min || $budget_max)
                                     {{ number_format($budget_min ?? 0, 0, ',', ' ') }} - {{ number_format($budget_max ?? 0, 0, ',', ' ') }} {{ $currency }}
@@ -279,10 +282,11 @@
                         </div>
                     </dl>
                 </div>
-            </flux:card>
+            </div>
         @endif
 
-        <div class="flex items-center justify-between border-t border-zinc-800/10 pt-6 dark:border-white/10">
+        {{-- Navigation --}}
+        <div class="flex items-center justify-between border-t border-zinc-200/60 pt-6 dark:border-white/[0.06]">
             @if($currentStep > 1)
                 <flux:button variant="outline" icon="arrow-left" wire:click="previousStep">
                     Précédent
