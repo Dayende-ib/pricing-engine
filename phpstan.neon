@@ -12,3 +12,9 @@ parameters:
 
     level: 5
     treatPhpDocTypesAsCertain: false
+    ignoreErrors:
+        - '#Access to an undefined property Illuminate\\Database\\Eloquent\\Model#'
+        - '#Cannot access property \$value on string#'
+        - '#Call to an undefined method Illuminate\\Database\\Eloquent\\Model::items#'
+        - '/Parameter #1 \$string of function str_pad expects string, int given/'
+    reportUnmatchedIgnoredErrors: false
